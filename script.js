@@ -6,44 +6,58 @@ const banner = document.querySelector('.app__image')
 const titulo = document.querySelector('.app__title')
 const botoes = document.querySelectorAll('.app__card-button')
 const statPauseBt = document.querySelector('#start-pause')
-
 const musicaFocoInput = document.querySelector('#alternar-musica')//se ID utiliza #
-const musica = new Audio('sons/luna-rise-part-one.mp3') //source da musica
+const iniciarOuPausarBt = document.querySelector('#start-pause span')
+const iniciarOuPausarBtIcone = document.querySelector('.app__card-primary-butto-icon')
+
+const tempoNaTela = document.querySelector('#timer')
+
+const musica = new Audio('sons/RacionaisNegoDrama.mp3') //source da musica
 const AudioTempoFinalizado = new Audio('/sons/beep.mp3')
 const Audioplay = new Audio('/sons/play.wav')
 const Audiopause = new Audio('/sons/pause.mp3')
 
+const imagemPausa = new Image()
+imagemPausa.src = 'imagens/pause.png'
+const imagemPlay = new Image()
+imagemPlay.src = 'imagens/play_arrow.png'
+
 musica.loop = true
 
-let tempoDecorridoEmSegundo = 5 //variavel para o temporizador
+let tempoDecorridoEmSegundo = 1500 //variavel para o temporizador
 let intervaloId = null
 
 musicaFocoInput.addEventListener('change', () => {//evento para tocar a musica
     if (musica.paused) {
         musica.play()
         console.log('musica iniciada')
+        
     } else {
         musica.pause()
         console.log('musica pausada')
+         
     }
 })
-
 focoBt.addEventListener('click', () => {
+    tempoDecorridoEmSegundo = 1500
     alterarContexto('foco')
     focoBt.classList.add('active')//add css de seleção de botão
 })
-
 curtoBt.addEventListener('click', () => {
+    tempoDecorridoEmSegundo = 300
     alterarContexto('descanso-curto')
     curtoBt.classList.add('active')//add css de seleção de botão
 })
 longoBt.addEventListener('click', () => {
+    tempoDecorridoEmSegundo = 900
     alterarContexto('descanso-longo')
     longoBt.classList.add('active')//add css de seleção de botão
 
 
 })
+
 function alterarContexto(contexto) {
+    mostrartempo()
     botoes.forEach(function (contexto) {
         contexto.classList.remove('active')//removendo css de seleção do botão 
     })
@@ -72,12 +86,12 @@ function alterarContexto(contexto) {
 const contagemRegressiva = () => {
     if (tempoDecorridoEmSegundo <=0) {
         AudioTempoFinalizado.play()
-        zerar()
         alert('Tempo Finalizado!')
+        zerar()
         return
     }
     tempoDecorridoEmSegundo -= 1
-    console.log('Temporizador' + tempoDecorridoEmSegundo)   
+    mostrartempo()   
 }
 
 statPauseBt.addEventListener('click', iniciarOuPausar)
@@ -86,13 +100,30 @@ function iniciarOuPausar() {//iniciar temporizador contagem regressiva a cada se
     if (intervaloId) {
         Audiopause.play()
         console.log('audio play')
+
         zerar()
         return
     }
     Audioplay.play()
     intervaloId = setInterval(contagemRegressiva,1000) 
+    iniciarOuPausarBt.textContent = 'Pausar'
+    iniciarOuPausarBtIcone.setAttribute('src', 'imagens/pause.png')
 }
+
 function zerar () {//zerar temporizador ao chegar em tempo zero
     clearInterval(intervaloId)
-    intervaloId = null
+    iniciarOuPausarBt.textContent = 'Iniciar'
+iniciarOuPausarBtIcone.setAttribute('src', 'imagens/play_arrow.png')
+    intervaloId = null    
 }
+
+function mostrartempo(){
+    const tempo = new Date(tempoDecorridoEmSegundo * 1000)
+    const tempoFormatado = tempo.toLocaleTimeString('pt-BR', {minute: '2-digit', second: '2-digit'})    
+    tempoNaTela.innerHTML = `${tempoFormatado}`
+}
+
+mostrartempo()
+
+
+//Lembrar de fazer o contador apareceder na tela
