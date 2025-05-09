@@ -12,7 +12,7 @@ const iniciarOuPausarBtIcone = document.querySelector('.app__card-primary-butto-
 
 const tempoNaTela = document.querySelector('#timer')
 
-const musica = new Audio('sons/RacionaisNegoDrama.mp3') //source da musica
+const musica = new Audio('sons/luna-rise-part-one.mp3') //source da musica
 const AudioTempoFinalizado = new Audio('/sons/beep.mp3')
 const Audioplay = new Audio('/sons/play.wav')
 const Audiopause = new Audio('/sons/pause.mp3')
